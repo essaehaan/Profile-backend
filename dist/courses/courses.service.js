@@ -24,6 +24,12 @@ let CoursesService = class CoursesService {
     findAll() {
         return this.coursesRepo.find({ order: { createdAt: 'DESC' } });
     }
+    async findOne(id) {
+        const course = await this.coursesRepo.findOne({ where: { id } });
+        if (!course)
+            throw new common_1.NotFoundException('Course not found');
+        return course;
+    }
     async create(dto) {
         const entity = this.coursesRepo.create(Object.assign(Object.assign({}, dto), { price: dto.price.toFixed(2) }));
         return this.coursesRepo.save(entity);

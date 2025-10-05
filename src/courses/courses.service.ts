@@ -13,6 +13,12 @@ export class CoursesService {
 		return this.coursesRepo.find({ order: { createdAt: 'DESC' } });
 	}
 
+	async findOne(id: string) {
+		const course = await this.coursesRepo.findOne({ where: { id } });
+		if (!course) throw new NotFoundException('Course not found');
+		return course;
+	}
+
 	async create(dto: CreateCourseDto) {
 		const entity = this.coursesRepo.create({ ...dto, price: dto.price.toFixed(2) });
 		return this.coursesRepo.save(entity);
